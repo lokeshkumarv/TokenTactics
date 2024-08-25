@@ -9,7 +9,7 @@ function Invoke-DeployCaptureServer {
     [cmdletbinding()]
     Param([Parameter(Mandatory=$true)]
     [string]$ResourceGroup,
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory=$true)]
     [string]$location,
     [Parameter(Mandatory=$True)]
     [String]$vmName,
@@ -44,14 +44,14 @@ Start-Sleep -Seconds 5
 Write-Output "az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript --scripts 'sudo -i -u azureuser git clone https://github.com/rvrsh3ll/TokenTactics.git /home/azureuser/TokenTactics'"
 az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript --scripts 'sudo -i -u azureuser git clone https://github.com/rvrsh3ll/TokenTactics.git /home/azureuser/TokenTactics'
 Start-Sleep -Seconds 5
-Write-Output "az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript --scripts 'sudo -i -u azureuser certbot certonly --register-unsafely-without-email -d $vmPublicDNSName.$location.cloudapp.azure.com --standalone --preferred-challenges http --non-interactive --agree-tos'"
-az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript --scripts "sudo -i -u azureuser certbot certonly --register-unsafely-without-email -d $vmPublicDNSName.$location.cloudapp.azure.com --standalone --preferred-challenges http --non-interactive --agree-tos"
+Write-Output "az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript --scripts 'certbot certonly --register-unsafely-without-email -d $vmPublicDNSName.$location.cloudapp.azure.com --standalone --preferred-challenges http --non-interactive --agree-tos'"
+az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript --scripts "certbot certonly --register-unsafely-without-email -d $vmPublicDNSName.$location.cloudapp.azure.com --standalone --preferred-challenges http --non-interactive --agree-tos"
 Start-Sleep -Seconds 5
-Write-Output "az vm run-command invoke -g $ResourceGroup -n $vmName  --command-id RunShellScript --scripts 'sudo -i -u azureuser mkdir /home/azureuser/TokenTactics/capturetokenphish/certs'"
-az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript --scripts 'sudo -i -u azureuser mkdir /home/azureuser/TokenTactics/capturetokenphish/certs'
+Write-Output "az vm run-command invoke -g $ResourceGroup -n $vmName  --command-id RunShellScript --scripts 'mkdir /home/azureuser/TokenTactics/capturetokenphish/certs'"
+az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript --scripts 'mkdir /home/azureuser/TokenTactics/capturetokenphish/certs'
 Start-Sleep -Seconds 5
-Write-Output "az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript 'sudo -i -u azureuser cp /etc/letsencrypt/live/$vmPublicDNSName.$location.cloudapp.azure.com/privkey.pem /home/azureuser/TokenTactics/capturetokenphish/certs/ && sudo -i -u azureuser cp /etc/letsencrypt/live/$vmPublicDNSName.$location.cloudapp.azure.com/cert.pem /home/azureuser/TokenTactics/capturetokenphish/certs/ && sudo -i -u azureuser chown -R azureuser:azureuser /home/azureuser/'"
-az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript --scripts "sudo -i -u azureuser cp /etc/letsencrypt/live/$vmPublicDNSName.$location.cloudapp.azure.com/privkey.pem /home/azureuser/TokenTactics/capturetokenphish/certs/ && sudo -i -u azureuser cp /etc/letsencrypt/live/$vmPublicDNSName.$location.cloudapp.azure.com/cert.pem /home/azureuser/TokenTactics/capturetokenphish/certs/ && sudo -i -u azureuser chown -R azureuser:azureuser /home/azureuser/"
+Write-Output "az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript 'cp /etc/letsencrypt/live/$vmPublicDNSName.$location.cloudapp.azure.com/privkey.pem /home/azureuser/TokenTactics/capturetokenphish/certs/ && cp /etc/letsencrypt/live/$vmPublicDNSName.$location.cloudapp.azure.com/cert.pem /home/azureuser/TokenTactics/capturetokenphish/certs/ && chown -R azureuser:azureuser /home/azureuser/'"
+az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript --scripts "cp /etc/letsencrypt/live/$vmPublicDNSName.$location.cloudapp.azure.com/privkey.pem /home/azureuser/TokenTactics/capturetokenphish/certs/ && cp /etc/letsencrypt/live/$vmPublicDNSName.$location.cloudapp.azure.com/cert.pem /home/azureuser/TokenTactics/capturetokenphish/certs/ && chown -R azureuser:azureuser /home/azureuser/"
 Start-Sleep -Seconds 5
 Write-Output "az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript --scripts 'sudo -i -u azureuser pip3 install -r /home/azureuser/TokenTactics/capturetokenphish/requirements.txt'"
 az vm run-command invoke -g $ResourceGroup -n $vmName --command-id RunShellScript --scripts 'sudo -i -u azureuser pip3 install -r /home/azureuser/TokenTactics/capturetokenphish/requirements.txt'
