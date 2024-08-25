@@ -10,7 +10,7 @@ function Invoke-DeployCaptureServer {
     Param([Parameter(Mandatory=$true)]
     [string]$ResourceGroup,
     [Parameter(Mandatory=$false)]
-    [string]$location = "eastus",
+    [string]$location,
     [Parameter(Mandatory=$True)]
     [String]$vmName,
     [Parameter(Mandatory=$True)]
